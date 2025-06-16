@@ -3,63 +3,85 @@
 namespace App\Http\Controllers;
 
 use App\Models\Team;
+use App\Models\Captain;
+use App\Models\Member;
 use Illuminate\Http\Request;
 
 class TeamController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $teams = Team::with('captain.member')->get();
+        return view('teams.index', compact('teams'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $members = Member::all();
+        return view('teams.create', compact('members'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'captain_id' => 'nullable|exists:captains,id',
+        ]);
+
+        $team = Team::create($request->only('name'));
+
+        if ($request->captain_id) {
+            $captain = Captain::find($request->captain_id);
+            if ($captain) {
+                $captain->team_id = $team->id;
+                $captain->save();
+            }
+        }
+
+        return redirect()->route('teams.index')->with('success', 'Team created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Team $team)
     {
-        //
+        $team->load('members', 'captain.member', 'games');
+        return view('teams.show', compact('team'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Team $team)
     {
-        //
+        $members = Member::all();
+        return view('teams.edit', compact('team', 'members'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Team $team)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'captain_id' => 'nullable|exists:captains,id',
+        ]);
+
+        $team->update($request->only('name'));
+
+        if ($request->captain_id) {
+            $captain = Captain::find($request->captain_id);
+            if ($captain) {
+                $captain->team_id = $team->id;
+                $captain->save();
+            }
+        } else {
+            // Remove captain if unset
+            Captain::where('team_id', $team->id)->update(['team_id' => null]);
+        }
+
+        return redirect()->route('teams.index')->with('success', 'Team updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Team $team)
     {
-        //
+        // Dissociate captain and members before deletion
+        Captain::where('team_id', $team->id)->update(['team_id' => null]);
+        Member::where('team_id', $team->id)->update(['team_id' => null]);
+        $team->delete();
+        return redirect()->route('teams.index')->with('success', 'Team deleted successfully.');
     }
 }

@@ -6,8 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model
 {
-     public function team() {
-        return $this->HasMany(Team::class);
+       protected $fillable = ['name', 'type', 'patron_id' , 'venue'];
 
+    // Each Game belongs to one Patron
+    public function patron() {
+        return $this->belongsTo(Patron::class);
     }
+
+
 }
