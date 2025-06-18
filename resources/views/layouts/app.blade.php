@@ -1,80 +1,93 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=2.0">
+    <title>@yield('title', 'Maringo Sports Club')</title>
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- Google Fonts + Font Awesome + Bootstrap -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Glitch&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #ffe259, #ffa751);
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+        }
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+        .navbar {
+            background-color: rgba(26, 35, 126, 0.95);
+        }
 
-    <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+        .navbar-brand {
+            font-family: 'Rubik Glitch', cursive;
+            font-size: 1.8rem;
+            color: #fff !important;
+        }
+
+        .nav-link {
+            color: #fff !important;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        footer {
+            background: #1a237e;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            position: relative;
+            margin-top: 50px;
+        }
+    </style>
+
+    @stack('styles')
 </head>
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <main class="py-4">
-            @yield('content')
-        </main>
+<!-- 🌐 Navbar -->
+<nav class="navbar navbar-expand-lg shadow">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url('/') }}">
+            <i class="fas fa-dumbbell me-2"></i> Maringo Club
+        </a>
+        <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon text-dark"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a href="{{ url('/') }}" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="{{ route('members.index') }}" class="nav-link">Members</a></li>
+                <li class="nav-item"><a href="{{ route('teams.index') }}" class="nav-link">Teams</a></li>
+                <li class="nav-item"><a href="{{ route('games.index') }}" class="nav-link">Games</a></li>
+                <li class="nav-item"><a href="{{ route('patrons.index') }}" class="nav-link">Patrons</a></li>
+                <li class="nav-item"><a href="{{ route('items.index') }}" class="nav-link">Items</a></li>
+            </ul>
+        </div>
     </div>
+</nav>
+
+<!-- 🎯 Page Content -->
+<div class="container main-content">
+    @yield('content')
+</div>
+
+<!-- 🔻 Footer -->
+<footer>
+    &copy; {{ date('Y') }} Maringo Sports Club • Nairobi, Kenya • Designed with ❤️
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+@stack('scripts')
+
 </body>
 </html>

@@ -3,21 +3,20 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Team;
+use App\Models\Captain;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
-{
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
-    {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+class DatabaseSeeder extends Seeder {
+    public function run() {
+        User::create([
+            'name' => 'Admin',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
+            'role' => 'admin',
         ]);
+        $team = Team::create(['name' => 'Sample Team', 'description' => 'Test team']);
+        Captain::create(['name' => 'Sample Captain', 'team_id' => $team->id]);
+        $team->update(['captain_id' => Captain::first()->id]);
     }
 }

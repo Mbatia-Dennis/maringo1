@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use App\Models\Member;
@@ -14,16 +13,19 @@ class MemberController extends Controller
         return view('members.index', compact('members'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
+        $members = Member::all();
         return view('members.create');
     }
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'name' => 'required|string|max:255',
-            // Add other validation rules as needed
+            'contact' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
         ]);
 
         Member::create($request->all());
@@ -45,7 +47,6 @@ class MemberController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            // Add other validation rules as needed
         ]);
 
         $member->update($request->all());

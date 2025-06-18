@@ -22,6 +22,8 @@ class ItemController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'captain_id' => 'nullable|exists:captains,id',
+            'quantity' => 'required|integer|min:1',
         ]);
 
         Item::create($request->all());

@@ -17,8 +17,9 @@ class TeamController extends Controller
 
     public function create()
     {
-        $members = Member::all();
-        return view('teams.create', compact('members'));
+        $captains = Captain::all();
+        $teams = Team::all();
+        return view('teams.create', compact('teams', 'captains'));
     }
 
     public function store(Request $request)
@@ -26,9 +27,10 @@ class TeamController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'captain_id' => 'nullable|exists:captains,id',
+            'description' => 'nullable|string|max:1000',
         ]);
 
-        $team = Team::create($request->only('name'));
+        $team = Team::create($request->only('name' , 'description'));
 
         if ($request->captain_id) {
             $captain = Captain::find($request->captain_id);
@@ -57,10 +59,11 @@ class TeamController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
             'captain_id' => 'nullable|exists:captains,id',
         ]);
 
-        $team->update($request->only('name'));
+        $team->update($request->only('name' , 'description'));
 
         if ($request->captain_id) {
             $captain = Captain::find($request->captain_id);
@@ -69,7 +72,6 @@ class TeamController extends Controller
                 $captain->save();
             }
         } else {
-            // Remove captain if unset
             Captain::where('team_id', $team->id)->update(['team_id' => null]);
         }
 
@@ -78,7 +80,6 @@ class TeamController extends Controller
 
     public function destroy(Team $team)
     {
-        // Dissociate captain and members before deletion
         Captain::where('team_id', $team->id)->update(['team_id' => null]);
         Member::where('team_id', $team->id)->update(['team_id' => null]);
         $team->delete();

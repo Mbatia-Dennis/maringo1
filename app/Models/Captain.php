@@ -7,10 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class Captain extends Model
 {
 
-    protected $fillable = ['name','team_ID'];
+    protected $fillable = ['name','member_id' , 'description' , 'team_id'];
 
     public function games()
     {
-        return $this->belongsToMany(Game::class );
+        return $this->hasMany(Game::class );
+    }
+    public function team()
+    {
+        return $this->belongsto(Team::class);
+    }
+    public function members()
+    {
+        return $this->belongsto(Member::class);
     }
 }

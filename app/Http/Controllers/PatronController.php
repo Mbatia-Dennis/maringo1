@@ -22,7 +22,8 @@ class PatronController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            // Add other validation rules as needed
+            'contact' => 'required|string|max:255',
+            'game_id' => 'required|exists:games,id',
         ]);
 
         Patron::create($request->all());
@@ -44,7 +45,6 @@ class PatronController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            // Add other validation rules as needed
         ]);
 
         $patron->update($request->all());

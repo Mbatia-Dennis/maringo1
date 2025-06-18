@@ -3,19 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Captain;
+use App\Models\Team;
 use Illuminate\Http\Request;
 
 class CaptainController extends Controller
 {
     public function index()
     {
-        $captains = Captain::all();
+        $captains = Captain::with('team.members')->get();
         return view('captains.index', compact('captains'));
     }
 
     public function create()
     {
-        return view('captains.create');
+        $teams = Team::all();
+        return view('captains.create', compact('teams'));
     }
 
     public function store(Request $request)
@@ -44,7 +46,7 @@ class CaptainController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            
+
         ]);
 
         $captain->update($request->all());
