@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=2.0">
     <title>@yield('title', 'Maringo Sports Club')</title>
 
-    <!-- Google Fonts + Font Awesome + Bootstrap -->
     <link href="https://fonts.googleapis.com/css2?family=Rubik+Glitch&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -65,12 +64,20 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a href="{{ url('/') }}" class="nav-link">Home</a></li>
-                <li class="nav-item"><a href="{{ route('members.index') }}" class="nav-link">Members</a></li>
-                <li class="nav-item"><a href="{{ route('teams.index') }}" class="nav-link">Teams</a></li>
-                <li class="nav-item"><a href="{{ route('games.index') }}" class="nav-link">Games</a></li>
-                <li class="nav-item"><a href="{{ route('patrons.index') }}" class="nav-link">Patrons</a></li>
-                <li class="nav-item"><a href="{{ route('items.index') }}" class="nav-link">Items</a></li>
+                @if(auth()->check())
+                    <li class="nav-item">
+                        <a href="#" class="nav-link"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </li>
+                @else
+                    <li class="nav-item"><a href="{{ route('login') }}" class="nav-link">Login</a></li>
+                    <li class="nav-item"><a href="{{ route('register') }}" class="nav-link">Register</a></li>
+                @endif
             </ul>
         </div>
     </div>

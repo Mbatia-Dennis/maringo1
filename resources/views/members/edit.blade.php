@@ -31,4 +31,10 @@
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
     </form>
+    <form action="{{ route('members.destroy', $member) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this member?');" style="margin-top: 1rem;">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger">Delete Member</button>
+    </form>
 @endsection
+

@@ -21,5 +21,10 @@
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
     </form>
+        <form action="{{ route(captains.destroy', $captain) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this captain?');" style="margin-top: 1rem;">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger">Delete Captain</button>
+    </form>
 </div>
 @endsection

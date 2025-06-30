@@ -23,4 +23,9 @@
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
     </form>
+        <form action="{{ route('teams.destroy', $team) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this team?');" style="margin-top: 1rem;">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger">Delete Team</button>
+    </form>
 @endsection
